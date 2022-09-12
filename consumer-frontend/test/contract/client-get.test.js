@@ -5,6 +5,8 @@ const { Matchers } = require("@pact-foundation/pact")
 
 const { getClient, getClients } = require("../../src/consumer")
 
+
+
 describe('API Pact test - Integration between \'clients-service\' and \'frontend\'', () => {
   describe("GET /clients", () => {
     const expectedBody = {
@@ -14,7 +16,7 @@ describe('API Pact test - Integration between \'clients-service\' and \'frontend
       id: 1
     }
 
-    before (async () => {
+    beforeEach (async () => {
       await mockProvider.addInteraction({
         state: "i have a list of clients",
         uponReceiving: "a request for all clients",
@@ -45,19 +47,20 @@ describe('API Pact test - Integration between \'clients-service\' and \'frontend
 
   describe("GET /clients/:id", () => {
     const expectedBody = {
-      firstName: 'Paulo',
-      lastName: 'Gonçalves',
+      firstName: 'Raphael',
+      lastName: 'Palhano',
       age: 25,
-      id: 123,
+      id: 4,
     }
+    
 
-    before (async () => {
+    beforeEach (async () => {
       await mockProvider.addInteraction({
-        state: "i have client with id 123",
-        uponReceiving: "a request for client with id 123",
+        state: "i have client with id 4",
+        uponReceiving: "a request for client with id 4",
         withRequest: {
           method: "GET",
-          path: "/clients/123",
+          path: "/clients/4",
           headers: {
             Accept: "application/json, text/plain, */*",
           },
@@ -73,7 +76,7 @@ describe('API Pact test - Integration between \'clients-service\' and \'frontend
     })
 
     it("returns correct body, header and statusCode", async () => {
-      const response = await getClient(123)
+      const response = await getClient(4)
       expect(response.headers['content-type']).to.equal("application/json; charset=utf-8")
       expect(response.data).to.deep.equal(expectedBody)
       expect(response.status).to.equal(200)
