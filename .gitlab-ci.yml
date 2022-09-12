@@ -1,0 +1,64 @@
+image: docker/compose:1.29.2
+services:
+  - name: docker:dind
+
+
+#.regular_rules: &regular_rules
+  #rules:
+#    - if: $CI_MERGE_REQUEST_APPROVED
+#    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+#      when: never
+#    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop" || "main" && $CI_COMMIT_REF_NAME == "feature" || "release"'
+
+variables:
+    PACT_BROKER_BASE_URL: $PACT_URL
+    PACT_BROKER_TOKEN: $PACT_BROKER_TOKEN
+
+
+.build_script_template: &consumer_script
+    - docker-compose build
+    - docker-compose push
+
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - test
+  - deploy
+
+
+build:       # This job runs in the build stage, which runs first.
+  stage: build
+  only: 
+    - main
+  script:
+    - *consumer_script
+   
+
+
+test-consumer:   # This job runs in the test stage.
+  stage: test    # It only starts when the job in the build stage completes successfully.
+  only: 
+    - main
+  script:
+    - docker-compose pull consumer-test-contract
+    - make consumer-test-contract
+    - docker pull pactfoundation/pact-cli:0.50.0.14
+    -  docker run --rm \
+          -w ${PWD} \
+          -v ${PWD}:${PWD} \
+          -e PACT_BROKER_BASE_URL \
+          -e PACT_BROKER_TOKEN \
+          pactfoundation/pact-cli:0.50.0.14 \
+          publish \
+          ${PWD}/consumer-frontend/pacts \
+          --consumer-app-version ${{ github.sha }} \
+          --tag-with-git-branch
+
+
+deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  only: 
+    - main
+  environment: production
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."
