@@ -22,7 +22,7 @@ jobs:
       run: make consumer-test-contract
     - run: docker pull pactfoundation/pact-cli:0.50.0.14
     - name: valid token
-    - run: echo $PACT_BROKER_TOKEN
+    - run: echo -e PACT_BROKER_TOKEN
     - name: Publish contract test result
       run: |
         docker run --rm \
