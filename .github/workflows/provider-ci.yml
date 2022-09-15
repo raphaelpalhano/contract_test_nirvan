@@ -37,7 +37,8 @@ jobs:
           pactfoundation/pact-cli:0.50.0.14 \
           broker can-i-deploy \
           --pacticipant clients-service \
-          --latest
+          --version ${{ github.sha }} \
+          --production
 
   # Only deploy from main
   deploy:
@@ -69,4 +70,5 @@ jobs:
           broker create-version-tag \
           --pacticipant clients-service \
           --version ${{ github.sha }} \
-          --tag prod
+          --tag production
+

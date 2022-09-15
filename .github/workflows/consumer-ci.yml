@@ -50,7 +50,10 @@ jobs:
           pactfoundation/pact-cli:0.50.0.14 \
           broker can-i-deploy \
           --pacticipant frontend \
-          --latest
+          --version ${{ github.sha }} \
+          --retry-while-unknown 30 \
+          --retry-interval 10 \
+          --production
 
   # Only deploy from main
   deploy:
@@ -82,4 +85,4 @@ jobs:
           broker create-version-tag \
           --pacticipant frontend \
           --version ${{ github.sha }} \
-          --tag prod
+          --tag production
