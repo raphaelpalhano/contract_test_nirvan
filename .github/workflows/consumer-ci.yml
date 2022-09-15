@@ -33,6 +33,7 @@ jobs:
           pactfoundation/pact-cli:0.50.0.14 \
           publish \
           ${PWD}/consumer-frontend/pacts \
+          --consumer-app-version fake-git-sha-for-demo-$(date +%s) \
           --tag-with-git-branch
 
   # Runs on branches as well, so we know the status of our PRs
@@ -51,7 +52,7 @@ jobs:
           pactfoundation/pact-cli:0.50.0.14 \
           broker can-i-deploy \
           --pacticipant frontend \
-          --version ${{ github.sha }} \
+          --version fake-git-sha-for-demo-$(date +%s) \
           --to production
 
   # Only deploy from main
@@ -83,5 +84,5 @@ jobs:
           pactfoundation/pact-cli:0.50.0.14 \
           broker create-version-tag \
           --pacticipant frontend \
-          --version ${{ github.sha }} \
+          --version fake-git-sha-for-demo-$(date +%s) \
           --tag production
