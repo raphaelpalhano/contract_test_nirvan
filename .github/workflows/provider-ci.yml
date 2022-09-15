@@ -38,8 +38,7 @@ jobs:
           broker can-i-deploy \
           --pacticipant clients-service \
           --version ${{ github.sha }} \
-          --production
-
+          --to production
   # Only deploy from main
   deploy:
     if: github.ref == 'refs/heads/main'
@@ -53,7 +52,6 @@ jobs:
         echo "\n========== STAGE: deploy ==========\n"
         echo "Deploying to production"
         echo "\n========== Deploy finished ==========\n"
-
   tag-verification-result-as-production:
     needs: deploy
     runs-on: ubuntu-18.04
@@ -71,4 +69,3 @@ jobs:
           --pacticipant clients-service \
           --version ${{ github.sha }} \
           --tag production
-
