@@ -21,6 +21,8 @@ jobs:
     - name: Run consumer contract test
       run: make consumer-test-contract
     - run: docker pull pactfoundation/pact-cli:0.50.0.14
+    - name: valid token
+      run: echo $PACT_BROKER_TOKEN
     - name: Publish contract test result
       run: |
         docker run --rm \
@@ -31,8 +33,8 @@ jobs:
           pactfoundation/pact-cli:0.50.0.14 \
           publish \
           ${PWD}/consumer-frontend/pacts \
-          --consumer-app-version ${{ github.sha }}
-          
+          --consumer-app-version ${{ github.sha }} \
+          --tag-with-git-branch
 
   # Runs on branches as well, so we know the status of our PRs
   can-i-deploy-to-production:
@@ -44,7 +46,7 @@ jobs:
     - run: docker pull pactfoundation/pact-cli:0.50.0.14
     - name: Can I deploy to production?
       run: |
-       docker run --rm \
+        docker run --rm \
           -e PACT_BROKER_BASE_URL \
           -e PACT_BROKER_TOKEN \
           pactfoundation/pact-cli:0.50.0.14 \
@@ -54,8 +56,6 @@ jobs:
           --retry-while-unknown 30 \
           --retry-interval 10 \
           --to production
-
-          
 
   # Only deploy from main
   deploy:
@@ -87,5 +87,4 @@ jobs:
           broker create-version-tag \
           --pacticipant frontend \
           --version ${{ github.sha }} \
-          --to production
-
+          --tag production
