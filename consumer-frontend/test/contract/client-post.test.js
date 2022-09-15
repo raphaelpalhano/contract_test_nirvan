@@ -3,7 +3,7 @@
 const { expect } = require('chai')
 const { Matchers } = require("@pact-foundation/pact")
 
-const { getClient, postClient } = require("../../src/consumer")
+const {postClient } = require("../../src/consumer")
 
 
 
@@ -16,9 +16,9 @@ describe('API Pact test - Integration between \'clients-service\' and \'frontend
     }
 
     const POST_EXPECTED_BODY = {
-      firstName: POST_BODY.firstName,
-      lastName: POST_BODY.lastName,
-      age: POST_BODY.age,
+      firstName: "Raphael Angel",
+      lastName: "Palhano",
+      age: 29,
       id: 4
     }
 
@@ -44,7 +44,6 @@ describe('API Pact test - Integration between \'clients-service\' and \'frontend
 
     it("returns correct body, header and statusCode", async () => {
         const response = await postClient(POST_BODY)
-        console.log(response.data)
         expect(response.data.id).to.equal(4)
         expect(response.status).to.equal(200)
       })

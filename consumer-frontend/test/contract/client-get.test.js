@@ -47,20 +47,20 @@ describe('API Pact test - Integration between \'clients-service\' and \'frontend
 
   describe("GET /clients/:id", () => {
     const expectedBody = {
-      firstName: 'Raphael',
-      lastName: 'Palhano',
-      age: 25,
-      id: 4,
+      "firstName": "Wonder",
+      "lastName": "Woman",
+      "age": 30,
+      "id": 2
     }
     
 
     beforeEach (async () => {
       await mockProvider.addInteraction({
-        state: "i have client with id 4",
-        uponReceiving: "a request for client with id 4",
+        state: "i have client with id 2",
+        uponReceiving: "a request for client with id 2",
         withRequest: {
           method: "GET",
-          path: "/clients/4",
+          path: "/clients/2",
           headers: {
             Accept: "application/json, text/plain, */*",
           },
@@ -76,7 +76,7 @@ describe('API Pact test - Integration between \'clients-service\' and \'frontend
     })
 
     it("returns correct body, header and statusCode", async () => {
-      const response = await getClient(4)
+      const response = await getClient(2)
       expect(response.headers['content-type']).to.equal("application/json; charset=utf-8")
       expect(response.data).to.deep.equal(expectedBody)
       expect(response.status).to.equal(200)
