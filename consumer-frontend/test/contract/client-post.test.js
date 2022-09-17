@@ -1,7 +1,7 @@
 "use strict"
 
 const { expect } = require('chai')
-const { Matchers } = require("@pact-foundation/pact")
+const { MatchersV3 } = require("@pact-foundation/pact")
 
 const {postClient } = require("../../src/consumer")
 
@@ -37,7 +37,7 @@ describe('API Pact test - Integration between \'clients-service\' and \'frontend
           },
           willRespondWith: {
               status: 200,
-              body: Matchers.like(POST_EXPECTED_BODY).contents,
+              body: MatchersV3.like(POST_EXPECTED_BODY).contents,
           },
         })
       })
