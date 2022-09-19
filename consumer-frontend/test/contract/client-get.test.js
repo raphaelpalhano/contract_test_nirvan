@@ -1,10 +1,9 @@
 "use strict"
 
 const { expect } = require('chai')
-const { Matchers } = require("@pact-foundation/pact")
+const { MatchersV3 } = require("@pact-foundation/pact")
 
-const { getClient, getClients } = require("../../src/consumer")
-
+const  API  = require("../../src/consumer").API
 
 
 describe('API Pact test - Integration between \'clients-service\' and \'frontend\'', () => {
@@ -24,7 +23,7 @@ describe('API Pact test - Integration between \'clients-service\' and \'frontend
           method: "GET",
           path: "/clients",
           headers: {
-            Accept: "application/json, text/plain, */*",
+            Accept: "application/json",
           },
         },
         willRespondWith: {
@@ -32,16 +31,20 @@ describe('API Pact test - Integration between \'clients-service\' and \'frontend
           headers: {
             "Content-Type": "application/json; charset=utf-8",
           },
-          body: Matchers.eachLike(expectedBody),
+          body: MatchersV3.eachLike(expectedBody),
         },
       })
     })
 
     it("returns correct body, header and statusCode", async () => {
-      const response = await getClients()
-      expect(response.headers['content-type']).to.equal("application/json; charset=utf-8")
-      expect(response.data).to.deep.equal([expectedBody])
-      expect(response.status).to.equal(200)
+      await mockProvider.executeTest(async (mockService) => {
+        const api = new API(mockService.url)
+        const response = await api.getClients()
+        expect(response.headers['content-type']).to.equal("application/json; charset=utf-8")
+        expect(response.data).to.deep.equal([expectedBody])
+        expect(response.status).to.equal(200)
+      })
+      
     })
   })
 
@@ -62,7 +65,7 @@ describe('API Pact test - Integration between \'clients-service\' and \'frontend
           method: "GET",
           path: "/clients/2",
           headers: {
-            Accept: "application/json, text/plain, */*",
+            Accept: "application/json",
           },
         },
         willRespondWith: {
@@ -70,16 +73,21 @@ describe('API Pact test - Integration between \'clients-service\' and \'frontend
           headers: {
             "Content-Type": "application/json; charset=utf-8",
           },
-          body: Matchers.like(expectedBody),
+          body: MatchersV3.like(expectedBody),
         },
       })
     })
 
     it("returns correct body, header and statusCode", async () => {
-      const response = await getClient(2)
-      expect(response.headers['content-type']).to.equal("application/json; charset=utf-8")
-      expect(response.data).to.deep.equal(expectedBody)
-      expect(response.status).to.equal(200)
+      await mockProvider.executeTest(async (mockService) => {
+        const api = new API(mockService.url)
+        const response = await api.getClient(2)
+        expect(response.headers['content-type']).to.equal("application/json; charset=utf-8")
+        expect(response.data).to.deep.equal(expectedBody)
+        expect(response.status).to.equal(200)
+
+      })
+      
     })
   })
 })

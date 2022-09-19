@@ -1,48 +1,74 @@
-const axios = require('axios')
 const express = require("express")
 const server = express()
+
+const { default: axios } = require('axios')
+const adapter = require("axios/lib/adapters/http")
+
+axios.defaults.adapter = adapter
+
 const getApiEndpoint = "http://localhost:8081"
 
-const getClients = async () => {
-  const res = await axios
-    .get(`${getApiEndpoint}/clients`)
+class API{
+
+  constructor(url){
+    if(url === undefined || url === ""){
+      url = getApiEndpoint
+    }
+    if (url.endsWith("/")) {
+      url = url.substr(0, url.length - 1)
+    }
+    this.url = url
+  }
+
+  definePath(path) {
+    if (!path.startsWith("/")) {
+        path = "/" + path
+    }
+    return `${this.url}${path}`
+  }
+
+  async getClients() {
+    const res = await axios
+      .get(`${this.definePath('/clients')}`)
+      .then((res) => {
+        return res
+      })
+      .catch((err) => {
+        return err.res
+      })
+    return res
+  }
+
+  async getClient(id) {
+    const res = await axios
+      .get(this.definePath(`/clients/${id}`))
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err.res
+      })
+    return res
+  }
+
+  async postClient(body){
+    const res = await axios
+    .post(this.definePath(`/clients`), body)
     .then((res) => {
-      return res
-    })
-    .catch((err) => {
-      return err.res
-    })
+        return res
+      })
+      .catch((err) => {
+        return err.res
+      })
   return res
+  }
+
+
 }
 
-const getClient = async (id) => {
-  const res = await axios
-    .get(`${getApiEndpoint}/clients/${id}`)
-    .then((res) => {
-      return res;
-    })
-    .catch((err) => {
-      return err.res
-    })
-  return res
-}
-
-const postClient = async (body) => {
-  const res = await axios
-  .post(`${getApiEndpoint}/clients`, body, {'Content-Type': 'application/json;charset=utf-8'})
-  .then((res) => {
-      return res
-    })
-    .catch((err) => {
-      return err.res
-    })
-return res
-}
 
 
 module.exports = {
-  server,
-  getClients,
-  postClient,
-  getClient,
+  API,
+  server
 };
