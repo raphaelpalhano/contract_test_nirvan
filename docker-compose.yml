@@ -1,6 +1,16 @@
 version: '3.8'
 
 services:
+  consumer-test-contract:
+    build:
+      context: consumer-frontend
+      dockerfile: Dockerfile
+    command: npm run test:contract
+    volumes:
+      - ./consumer-frontend/test/contract:/app/test/contract
+      - ./consumer-frontend/pacts:/app/pacts
+      - ./consumer-frontend/logs:/app/logs
+
   provider-test-contract:
     build:
       context: provider-clients-service
@@ -14,12 +24,4 @@ services:
       - PACT_URL
       - CI
 
-  consumer-test-contract:
-    build:
-      context: consumer-frontend
-      dockerfile: Dockerfile
-    command: npm run test:contract
-    volumes:
-      - ./consumer-frontend/test/contract:/app/test/contract
-      - ./consumer-frontend/pacts:/app/pacts
-      - ./consumer-frontend/logs:/app/logs
+  
