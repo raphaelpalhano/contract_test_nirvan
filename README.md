@@ -5,7 +5,8 @@
 </div>
 <br>
 
-> **Gostaria de aprender teste de contrato do 0 ao avançado? Forneço treinamento prático, basta me contatar via [Linkedin](https://www.linkedin.com/in/paulo-goncalves) ou pelo e-mail consultoria@paulog.dev que envio a proposta com toda a grade e detalhes importantes.**
+<div >
+
 
 ## Base de teste de contrato
 
@@ -22,6 +23,11 @@ O intuito desse material é demonstrar como deve ser a implementação de pipeli
 O diagrama abaixo é a representação do Nirvana do Pact que foi implementado nesse repositório.
 
 ![Diagrama - 'Nirvana' do teste de contrato](.github/diagrama-teste-de-contrato.png)
+
+
+Digrama integrado Consumer e Provider
+
+![Digrama - teste de contrato integrado provider e consumer](.github/drigrama-pipe-pact.drawio.png)
 
 O _pact-cli_ informado no diagrama se refere a comandos do [Pact Broker Client](https://github.com/pact-foundation/pact_broker-client).
 
@@ -114,6 +120,3 @@ Ao clicar em _details_ abrirá a página do Pactflow contendo o contrato publica
 
 ![Print de configuração do webhook de status do resultado no commit](.github/webhook-test-status.png)
 
----
-
-[LICENSE GNU General Public License v3.0](./LICENSE)

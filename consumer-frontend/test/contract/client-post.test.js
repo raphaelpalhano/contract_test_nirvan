@@ -1,9 +1,9 @@
 "use strict"
 
 const { expect } = require('chai')
-const { Matchers } = require("@pact-foundation/pact")
+const { MatchersV3 } = require("@pact-foundation/pact")
 
-const {postClient } = require("../../src/consumer")
+const  API  = require("../../src/consumer").API
 
 
 
@@ -37,15 +37,18 @@ describe('API Pact test - Integration between \'clients-service\' and \'frontend
           },
           willRespondWith: {
               status: 200,
-              body: Matchers.like(POST_EXPECTED_BODY).contents,
+              body: MatchersV3.like(POST_EXPECTED_BODY),
           },
         })
       })
 
     it("returns correct body, header and statusCode", async () => {
-        const response = await postClient(POST_BODY)
-        expect(response.data.id).to.equal(4)
-        expect(response.status).to.equal(200)
+        await mockProvider.executeTest(async (mockService) => {
+          const api = new API(mockService.url)
+          const response = await api.postClient(POST_BODY)
+          expect(response.data.id).to.equal(4)
+          expect(response.status).to.equal(200)
+        })
       })
   })
 

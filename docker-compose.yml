@@ -1,19 +1,6 @@
 version: '3.8'
 
 services:
-  provider-test-contract:
-    build:
-      context: provider-clients-service
-      dockerfile: Dockerfile
-    command: npm run test:contract
-    volumes:
-      - ./provider-clients-service/test/contract:/app/test/contract
-      - ./.git:/app/.git
-    environment:
-      - PACT_BROKER_TOKEN
-      - PACT_URL
-      - CI
-
   consumer-test-contract:
     build:
       context: consumer-frontend
@@ -23,3 +10,17 @@ services:
       - ./consumer-frontend/test/contract:/app/test/contract
       - ./consumer-frontend/pacts:/app/pacts
       - ./consumer-frontend/logs:/app/logs
+
+  provider-test-contract:
+    build:
+      context: provider-clients-service
+      dockerfile: Dockerfile
+    command: npm run test:contract
+    volumes:
+      - ./provider-clients-service/test/contract:/app/test/contract
+      - ./.git:/app/.git
+    environment:
+      - PACT_BROKER_TOKEN=yCtH3UiSXICivVwufpC8Nw
+      - PACT_URL=https://avenuecode.pactflow.io
+      - CI
+
