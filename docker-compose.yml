@@ -20,8 +20,7 @@ services:
       - ./provider-clients-service/test/contract:/app/test/contract
       - ./.git:/app/.git
     environment:
-      - PACT_BROKER_TOKEN
-      - PACT_URL
+      - PACT_BROKER_TOKEN=yCtH3UiSXICivVwufpC8Nw
+      - PACT_URL=https://avenuecode.pactflow.io
       - CI
 
-  
